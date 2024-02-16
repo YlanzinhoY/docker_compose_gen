@@ -1,14 +1,13 @@
 package generator
 
 import (
-	"log"
-	"os"
-
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/ylanzinhoy/docker_compose_gen/internal/controller"
+	genfiles "github.com/ylanzinhoy/docker_compose_gen/internal/genFiles"
 )
 
 func GenerateDockerFile() {
-	var types = []string{"postgres", "mysql"}
+	var types = []string{"postgres", "mysql", "mongodb"}
 
 	prompt := &survey.Select{
 		Message: "Choose a database type:",
@@ -21,59 +20,10 @@ func GenerateDockerFile() {
 
 	switch dbType {
 	case "postgres":
-		generatePostgresDockerFile()
+		controller.ControllerGenerator("docker-compose.yml", genfiles.Postgres())
 	case "mysql":
-		generateMySQLDockerFile()
+		controller.ControllerGenerator("docker-compose.yml", genfiles.Mysql())
+	case "mongodb":
+		controller.ControllerGenerator("docker-compose.yml", genfiles.MongoDB())
 	}
-}
-
-func generatePostgresDockerFile() {
-	dockerfile := `version: '3'
-services:
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-`
-
-	caminhoArquivo := "docker-compose.yml"
-
-	err := os.WriteFile(caminhoArquivo, []byte(dockerfile), 0666)
-
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("Arquivo Docker Compose criado em: %s\n", caminhoArquivo)
-
-}
-
-func generateMySQLDockerFile() {
-	dockerfile := `version: '3'
-services:
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mysqldb
-      MYSQL_USER: mysqluser
-      MYSQL_PASSWORD: mysqlpassword
-    ports:
-      - "3306:3306"
-`
-
-	caminhoArquivo := "docker-compose.yml"
-
-	err := os.WriteFile(caminhoArquivo, []byte(dockerfile), 0666)
-
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("Arquivo Docker Compose criado em: %s\n", caminhoArquivo)
-
 }
