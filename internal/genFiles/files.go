@@ -4,7 +4,7 @@ func Postgres() string {
 
 	dockerfile := `version: '3'
 	services:
-		postgres:
+		postgres_prod:
 			image: postgres:latest
 			environment:
 				POSTGRES_USER: postgres
@@ -29,7 +29,7 @@ func Postgres() string {
 func Mysql() string {
 	dockerfile := `version: '3'
 	services:
-		mysql:
+		mysql_prod:
 			image: mysql:latest
 			environment:
 				MYSQL_ROOT_PASSWORD: rootpassword
@@ -55,7 +55,7 @@ func Mysql() string {
 func MongoDB() string {
 	dockerfile := `version: '3'
 	services:
-		mongodb:
+		mongodb_prod:
 			image: mongo:latest
 			environment:
 				MONGO_INITDB_ROOT_USERNAME: root
